@@ -3,6 +3,7 @@
 \input{~/templates/math.tex}
 \newtheorem{question}{Question}
 \usepackage{fullpage}
+\DeclareMathOperator{\Sym}{Sym_1}
 
 \title{Arithmetic Combinatorics}
 \author{Vincent Tran}
@@ -99,6 +100,12 @@ Inverse: For which $A $ is $|A+A| $ small?
 	See \Cref{fig:e-transform}
 \end{definition}
 
+\begin{figure}[ht]
+	\centering
+	\includegraphics[width = .5\textwidth]{wall}
+	\caption{The e-transform}
+\end{figure}
+
 \begin{lem}
 	\begin{enumerate}
 		\item $|A_{(e)}| + |B_{(e)}| = |A| + |B| $
@@ -182,5 +189,274 @@ Inverse: For which $A $ is $|A+A| $ small?
 	Since $|A+B| = |A| + |B| - 1 $, $A+B = A_{(e)} + b = A_{(e')} + b $ and thus $A\cup (B+e) = A \cup (B+e') $.
 	As $|B_{(e)}| = 1 $, $A \cap B+e = b + e$ and similarly for $e' $, $B+e $ and $B+e' $ differ by at most one element (use the fact that $A\cup (B+e) = A \cup (B+e')$).
 	Hence $B $ is an arithmetic sequence of $e' - e $.
+\end{proof}
+
+\section{3/21/24}
+
+Let $A \subseteq G $ be non-empty and finite.
+
+\begin{definition}
+	\textbf{$\Sym(A) $} $\coloneqq \{x | x+A = A\}   $.
+	This is clearly a subgroup of $G $.
+\end{definition}
+
+\begin{thm}[Kneser (53)]
+	Let $A,B \subseteq G, G = \Sym(A+B) $.
+	Then $|A+B| \ge |A+H| + |B+H| - |H| $.
+\end{thm}
+
+\begin{proof}
+	Proof 1: Induction on 4 parameters.
+
+	Proof 2:
+	For $\Z $, $|H| = 1 $ because $H $ has to be 0 by ordering $A $.
+	Then the statement is $|A+B| \ge |A| + |B| - 1 $, done by Cauchy-Davenport.
+
+	For $\Z_p $, $H= 0 $ or $\Z_p $ as the only subgroups of $\Z_p $.
+	This is trivial.
+\end{proof}
+
+At this point, we know a lot about when $|A| = n, |A+A| = 2n-1$ (by Vosper's), and now we can get information about $|A+A| = 2n-1 + b, b \le n-1$:
+
+\begin{thm}[Freiman's $3k-3 $]
+	For $A\subseteq \Z $ and $|A+A| = 2n-1 + b $ for $b \le n-1 $, then $A $ is a subset of an $n+b $ term arithmetic progression.
+\end{thm}
+
+\begin{example}
+	We can generate examples by letting $A = \{0,\ldots ,n-2, n-1+b\} \subset \{0,1,\ldots ,n+b\}    $.
+	Notice that $|A+A| = 2n+b-1 $ because of three cases:
+	\[
+		\begin{cases}
+			[0,n-2] + [0,n-2] = [0,2n-2]\\
+			[0,n-2] + \{n-1+b\}  = [2n-2,2n-2+b]\\
+			\{n-1+b\} + \{n-1+b\}  = \{2n-2+2b\}
+		\end{cases}
+	.\]
+	This is $2n-1+b $ elements.
+\end{example}
+
+\subsection{Digression into Some Combinatorics}
+
+This is a treasured result in combinatorics, and will use a similar technique as the e-transform.
+
+\begin{definition}
+	$[n] \coloneqq \{1,\ldots,n\}   $.
+\end{definition}
+
+\begin{definition}
+	$\Delta\subseteq \mathcal{P}([n]) $ is an \textbf{ideal} if $\forall F\in \Delta , G\subseteq F \implies G \in \Delta$.
+\end{definition}
+
+\begin{definition}
+	\[
+		\binom{[n]}{k} \coloneqq  \{F\subseteq [n] \vert |F| = k\}
+	.\]
+\end{definition}
+
+\begin{definition}
+	The \textbf{shadow} of $\mathcal{F} = \Delta \cap \binom{[n]}{k}$ to be $\partial \mathcal{F} \coloneqq \{G \in \binom{[n]}{k} | \exists F \in \mathcal{F}, |F \setminus G| = 1\}   $.
+	Intuitively, the shadow compacts sets, much like the e-transform.
+\end{definition}
+
+\begin{thm}[Kruskal-Katoma]
+	Let $|\mathcal{F}| = m $ and find $x $ s.t. $m = \binom{x}{k} $.
+	Then
+	\[
+		|\partial \mathcal{F}| \ge \binom{x}{k-1}
+	.\]
+\end{thm}
+
+An equivalent statement is that given $\{i_{1} < i_{2} < \cdots < i_k \} \in \binom{[n]}{k}  $, we can view it as the string $[i_k,\ldots,i_{1}] $ and order the $\binom{[n]}{k} $ lexicographically.
+Then let $\mathcal{R}(m,k) $ be the $m $ smallest elements in this ordering.
+The equivalent statement is that $|\partial(\mathcal{F})| \ge |\partial(\mathcal{R}(m,k))| $.
+
+\begin{definition}
+	\begin{align*}
+		S_{ij}: \mathcal{P}([n]) &\longrightarrow  \mathcal{P}([n])\\
+		S_{ij}(A) &=
+		\begin{cases}
+			A \setminus \{j\} \cup \{i\}  & \text{ if $j \in A $ and $i \not\in A $}\\
+			A & \text{ else}
+		\end{cases}
+	.\end{align*}
+
+	\begin{align*}
+		S_{ij}: \mathcal{P}(\mathcal{P}([n])) &\longrightarrow \mathcal{P}(\mathcal{P}([n]))\\
+		S_{ij}(\mathcal{H}) \coloneqq \{S_{ij}(H), \forall i,j\}
+	.\end{align*}
+
+	Intuitively, this is trying to get $G $ through the ``wall'' using $S_{ij} $.
+	This is analogous to the e-transform from before.
+\end{definition}
+
+\begin{lem}
+	For $\mathcal{F} \subseteq \binom{[n]}{k} $ and $\partial(S_{ij}(\mathcal{F})) \subseteq S_{ij}(\partial \mathcal{F}) $, then $|\partial (S_{ij}\mathcal{F})| \le |S_{ij}(\partial(\mathcal{F}))|$.
+\end{lem}
+
+\begin{proof}
+	For $G \in \partial(S_{ij}(\mathcal{F}))$, we have that $G + \ell \in S_{ij}(\mathcal{F}) $ for some $\ell $.
+	If this is true up to $k-1 $, then when $G \cup i \setminus j \in \partial(\mathcal{F}) $, then .we can just swap $i,j $ and find that $G \in S_{ij}(\partial \mathcal{F}) $.
+	Let $G' $ be a preimage of $G + \ell $.
+
+	Case one is that $G' + \ell\in \mathcal{F} $.
+	% $G'\cup \ell \in \mathcal{F} $ ($G' $ being a difference set from $G \in \partial(S_{ij}(\mathcal{F})) $).
+	The only case is $G \cup i \setminus j \not\in \partial (\mathcal{F}) $.
+	If $i = \ell $, then $G' \cup \ell -j \in \partial(\mathcal{F}) $, a contradiction.
+
+	If $i \ne \ell$: $G' \cup i \not\in \mathcal{F} $ (otherwise $G' \in\partial \mathcal{F} $, completing the proof), which implies $G' \cup i \setminus j \setminus \ell \not\in \mathcal{F}$ because otherwise $G'\cup i \setminus j \in \partial(\mathcal{F})$ which completes it with a swap.
+	But $G' + \ell\in \mathcal{F} \implies $ we can shift and have $G \cup \ell=G' \setminus j \cup i \cup \ell \in S_{ij}(\mathcal{F}) $.
+	This then implies that $G \setminus j \cup i \in \partial(S_{ij}(F)) \implies G \in S_{ij}(\partial(S_{ij}(\mathcal{F}))) $.
+
+	If $G' \cup \ell\not\in \mathcal{F} $: Then $G \cup \ell \in S_{ij}(\mathcal{F}) \implies G \cup \ell \cup j \setminus i \in F $.
+\end{proof}
+
+\begin{proof}(Krushkal-Katoma)
+	By the Lemma, we can assume no more shifts can be done.
+	However, this doesn't trivialize the problem like the e-transform case: $\{\{1,2\} ,\{1,3\} ,\{1,4\}    \}   $ and $\{\{1,2\} ,\{2,3\} ,\{1,3\}    \}   $ are both extremal and we can't shift in.
+
+	Define $\mathcal{F}(1) = \{F \vert 1 \in F\} , F(0) = \{F | 1 \not\in F\}    $.
+	Assume this is true for smaller sets.
+	We just need to show that $|\partial(F(0))| \le |F(1)|$.
+
+	Take $G \in \partial(F(0)) $.
+	Then $S_{e_{1}} $ doesn't affect $G $ by assumption, so $G \cup \{1\} \in F(1)	$ for an arbitrary element $e \in G $.
+\end{proof}
+
+\section{Doubling Constant}
+
+\begin{definition}
+	\[
+	\delta[A] = \frac{|A+A|}{|A|}
+	.\]
+\end{definition}
+
+We have dealt with $\delta[A] \le 2 $, the $3k-3 $ theorem gives us $\delta[A] \le 3 $.
+In general, we need generalized arithmetic progressions.
+
+This is Freiman's Theorem and the Polynomial Freiman-Rusza conjecture, which was solved recently in characteristic 2 by Gowers, Green, Manners, Tao.
+
+How to construct sets with small doubling constants?
+
+For $A $ an arithmetic progression, we are done.
+Define $A,B $ as independent if $|A+B| = |A|\cdot |B|$.
+Then
+\[
+	\delta[A+B] = \frac{|A+B+A+B|}{|A+B|} = \frac{|(A+A)+(B+B)|}{|A|\cdot|B|} \le \frac{|A+A|}{|A|} \cdot \frac{|B+B|}{|B|} \le \delta[A] \cdot \delta[B]
+.\]
+
+\section{3/26/24}
+
+Now we look to generalized arithmetic progressions (gap) of rank $d $: $A_{1} + \cdots + A_d $ with $A_i $ being ap.
+
+\begin{definition}
+	A gap is \textbf{proper} if $|A_{1}+\cdots+A_d| = |A_{1}|\cdot|A_{2}|\cdots |A_d| $
+\end{definition}
+
+$P $ is a proper ap $\implies \delta[P] \le 2^d $ with $d = \rank(P) $.
+
+Now suppose $B\subseteq A $ and let $\mu = \frac{|B|}{|A|} $.
+Then $\delta[B] = \frac{|B+B|}{|B|} \le \frac{|A+A|}{|B|} = \mu ^{-1}\delta[A] $.
+
+There are two cases for the group:
+\begin{itemize}
+	\item Torsion Free (e.g. $\Z,\Z_p^d,\R^d $)
+	\item Forsion (e.g. $\Z_2^n $)
+\end{itemize}
+
+\begin{thm}[Freiman (Torsion Free)]
+	Fix an integer $k $.
+	Then $\exists $ constants $d,\mu $ (depending on $k $ only) s.t. $\forall A\subseteq \Z $ and $\delta[A] = k $, then there exists a propery gap $P $ s.t. $\rank(P)\le d $, $A \subseteq P $, and $\frac{|P|}{|A|}\le \mu ^{-1} $.
+\end{thm}
+
+\begin{cor}
+	$\delta[A] \le \mu ^{-1}2^d $
+\end{cor}
+
+The point of this is that $\exists \mu ^{-1}, d \le k^{o(1)}  $.
+
+We really want $d $ to be tight to $k $.
+
+But we can always find a crazy set $|X| = k $ and $\delta[X] = k $ s.t. $d$ has to be $k $.
+
+\begin{conj}[Polynomial Freiman-Rusza Conjecture]
+	For $A\subseteq P + X $ with $|X| \le k^{O(1)}$, $\rank(A) \le O(\log K) $.
+\end{conj}
+
+\begin{thm}[Gowers, Green, Manners, Tao (23)]
+	$\forall A \subseteq \Z_2^n $ with $\delta[A] =k $, $\exists H \subseteq \Z_2^n $ s.t. $\exists X(|X| \le k^{O(1)})  $ s.t. $A\subseteq H + X $, then $|H| \le k^{O(1)}|A|  $.
+\end{thm}
+
+Some History:
+
+\begin{enumerate}
+	\item Freiman's Proof (didn't draw much attention)
+	\item Rusza's Proof which brought in analysis $\rightarrow $ more attention
+	\item Sanders proved quasi-polynomial Freiman Rusza
+	\item Recent GGMT polynomial FR conjection in characteristic 2 (promised in general as well)
+\end{enumerate}
+
+In this class 1, 2, and 4 will be discussed.
+
+Let $A\subseteq \R^d $ (under addition). Freiman's can still apply here.
+
+\begin{lem}[Freiman Dimension Reduction Lemma]
+	Let $k = \delta[A], d=\operatorname{rk}(\operatorname{Span}(A))$.
+	Then $|A+A| \ge (d+1)|A| - d(d+1) / 2 \implies \delta[A] \ge d+1, d \le k-1$.
+
+	This is obviously false in $\char \ne 0 $.
+\end{lem}
+
+\begin{proof}
+	We do induction on $|A| $.
+	This is easily true for $|A| = 1. $
+
+	Then for $|A| > 1 $, take the convex hull of $A $.
+	Take a point $a\in A $.
+	So $A' = A \setminus \{a\}  \implies |A' +A'| \ge (d'+1)|A'| - d'(d'+1) / 2$ by induction hypothesis.
+
+	If $\operatorname{rk}(A') = d $, then $a \in A $ has $d $ neighbors, $a_{1},\ldots ,a_d $.
+	The midpoints $\frac{a+a_{1}}{2},\ldots, \frac{a+a_d}{2} $ are not in $A' $ because otherwise $a \in A' $, a contradiction of the number of neighbors (?).
+	Hence $a+a_{1},\ldots,a+a_d \not\in A'+A' $ (separate them by a hyperplane, Minkowski sum of a convex set is convex).
+
+	So $|A+A| \ge |A'+A'| + d+1 \ge (d+1)(|A'|+1) - d(d+1) / 2 $, completing the induction in this case.
+
+	If $\operatorname{rk}(A') = d-1 $, then $a $ is outside the $d-1 $ dimensional hyperplane $A' $ is in, which implies that $a+A', a+a \not\in A'+A' \implies |A+A| = |A'+A'| + |A'|+1$, which by induction once again completes the proof.
+\end{proof}
+
+We want $A\subseteq P $ s.t. $A $ is dense in $P $.
+We can't find a gap in $A $, $A+A $, but strangely we can in $2A-2A $.
+
+\begin{lem}[Bogolubov]
+	$\forall A\subseteq \Z $, $\exists P \subseteq 2A - 2A$ s.t. $P $ is a proper gap and dense in $2A - 2A $, i.e.
+	\[
+		|P| \ge \frac{|2A-2A|}{\exp(k^{O(1)}) }
+	.\]
+\end{lem}
+
+Can apply for $k = |A|^{o(1)}  $ as well.
+
+\begin{lem}[Rusza Covering Lemma]
+	$\forall A,B \subseteq G $, $\exists X\subseteq B $ s.t.
+	\begin{enumerate}
+		\item $|X| \le |A+B| / |A| $
+		\item So $B \subseteq A - A + X $.
+	\end{enumerate}
+\end{lem}
+
+See \Cref{fig:Rusza_covering}.
+
+\begin{figure}[ht]
+	\centering
+	\includegraphics[width=.5\textwidth]{Rusza_covering}
+	\caption{Rusza Covering Lemma \label{fig:Rusza_covering}}
+\end{figure}
+
+\begin{proof}
+	1) is trivial.
+	We are looking for the set $X = \{b_{1},\ldots, b_a\}$ that has the maximal number of translates that are pairwise disjoint.
+
+	2) Fix an element $a+b \in A+ B $.
+	Then $A + b $ has to intersect an element $x \in X $ s.t. $A+x \cap A+b \ne \emptyset $.
+	Hence there is $a_{1} + b = a_{2} + x \iff b = a_{2}+x-a_{1} \implies \forall b \in B, \exists x \in X$ s.t. $b \in A - A + X$.
 \end{proof}
 \end{document}
