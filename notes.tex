@@ -426,7 +426,7 @@ Let $A\subseteq \R^d $ (under addition). Freiman's can still apply here.
 We want $A\subseteq P $ s.t. $A $ is dense in $P $.
 We can't find a gap in $A $, $A+A $, but strangely we can in $2A-2A $.
 
-\begin{lem}[Bogolubov]
+\begin{lem}[Bogolubov]\label{lem:bogolubov-rusza}
 	$\forall A\subseteq \Z $, $\exists P \subseteq 2A - 2A$ s.t. $P $ is a proper gap and dense in $2A - 2A $, i.e.
 	\[
 		|P| \ge \frac{|2A-2A|}{\exp(k^{O(1)}) }
@@ -435,7 +435,7 @@ We can't find a gap in $A $, $A+A $, but strangely we can in $2A-2A $.
 
 Can apply for $k = |A|^{o(1)}  $ as well.
 
-\begin{lem}[Rusza Covering Lemma]
+\begin{lem}[Rusza Covering Lemma]\label{lem:rusza_covering}
 	$\forall A,B \subseteq G $, $\exists X\subseteq B $ s.t.
 	\begin{enumerate}
 		\item $|X| \le |A+B| / |A| $
@@ -459,4 +459,230 @@ See \Cref{fig:Rusza_covering}.
 	Then $A + b $ has to intersect an element $x \in X $ s.t. $A+x \cap A+b \ne \emptyset $.
 	Hence there is $a_{1} + b = a_{2} + x \iff b = a_{2}+x-a_{1} \implies \forall b \in B, \exists x \in X$ s.t. $b \in A - A + X$.
 \end{proof}
+
+\section{3/28/24}
+
+Thus far we have been looking to cover $A $ with a GAP, and now we are covering a GAP with $2A-2A $.
+
+First we prove Freiman:
+
+\begin{proof}
+	Let $A = P $ and $B = 2A-2A $ in the \Cref{lem:rusza_covering} $\rightarrow $ $X $ s.t. $|X| \le \frac{|P+2A-2A|}{||P|} $.
+	Because $P\subseteq 2A-2A $,
+	\[
+		|X| \le \frac{|P+2A-2A|}{|P|} \le \frac{|4A-4A|}{|P|} \le \frac{|4A-4A|}{|A|}\exp(k^{O(1)}
+	.\]
+
+	Then $2A-2A \subseteq P -P + X $.
+	WLOG, we can assume $0\in A $ (shift).
+	Hence $A\subseteq 2A-2A \subseteq P - P +X $.
+
+	So now all we need to do is to bound $\frac{|4A-4A|}{|A|} $.
+	In the non-commutative case, this can be very large.
+	In the torsion case, this can't be bounded, by letting $P = \Z_p $, which leads to $P-P $ being a gap, but may not be proper.
+	To fix this, we introduce a new tool:
+\end{proof}
+
+\subsection{Properization}
+
+\begin{thm}
+	For any gap $P $ of rank $d $, there exists a proper gap of rank $d $ s.t. $P \subseteq Q $ and $|Q| \le |P|\cdot d^{O(d^3)}  $.
+\end{thm}
+
+Inuitively, $\rank(P) \le K^{O(1)}$, roughly $K $.
+
+\subsection{Pl\"unecke-Rusza Inequalities}
+
+\begin{thm}\label{thm:plunecke-rusza}
+	$A,B \subseteq G $ s.t. $|A+B| = K |A| $.
+	Then $|\pm B \pm B \pm B \pm \ldots \pm B |$ ($h $ times) $\le K^{h}|A|  $.
+\end{thm}
+
+\begin{cor}
+	Suppose $B = A $.
+	Then $k = \delta[A] $.
+	The inequality then becomes
+	\[
+		|kA -\ell A| \le K^{k+\ell}|A|
+	.\]
+\end{cor}
+
+The above Corollary then gives an upperbound on $\frac{|4A-4A|}{|A|} $, proving Freidman's Theorem.
+
+Now let $\sigma[A] = \frac{|A-A|}{|A|} $.
+
+\begin{cor}
+	Then with $k = l = 1 $, $\sigma[A] \le \delta[A]^2$.
+\end{cor}
+
+Now this result is going to be very useful, especially in its generalized form for Gower's Theorem.
+
+\begin{lem}[Rusza Triangle Inequality]
+	Let $G $ be an ablian group.
+
+	Combinatorial Form:
+	\[
+		|A-C| \le \frac{|A-B|\cdot |B-C|}{|B|}
+	.\]
+\end{lem}
+\begin{proof}
+	We WTS that $|B|\cdot |A-C| \le |A-B| \cdot |B-C| $.
+	We prove it by finding an injective function $B\times (A-C) \rightarrowtail (A-B) \times (B-C) $
+
+	$\forall x \in A - C $ (arbitrary but fixed), represent it as $x=a_x-c_x, a_x \in A, c_x \in C$.
+	Then map
+	\[
+		(b,x) \mapsto (a_x-b,b-c_x)
+	.\]
+	Then say you're given $(a_x-b,b-c_x) $.
+	Then you can recover a unique $x = a_x-b+b-c_x $ and from there recover $a_x,c_x $.
+	This then gives $b $.
+\end{proof}
+\begin{lem}[Alternative Statement Rusza Triangle Inequality]
+	\[
+		\frac{|A-C|}{|A|^{\frac{1}{2}}|C|^{\frac{1}{2}} } \le \frac{|A-B|}{|A|^{\frac{1}{2}}|B|^{\frac{1}{2}}  } \cdot \frac{|B-C|}{|B|^{\frac{1}{2}}|C|^{\frac{1}{2}}  }
+	.\]
+\end{lem}
+
+\begin{definition}[Rusza's Distance]
+	\[
+		\bm{d(A,C)} = \ln \frac{|A-C|}{|A|^{\frac{1}{2}}|C|^{\frac{1}{2}}  }
+	.\]
+\end{definition}
+
+We can check that it is almost a metric (semimetric).
+Since $|A-C| \ge \max(|A|,|C|) $, the fraction in the RHS is at least 1, showing that the RHS is non-negative.
+Clearly it is symmetric.
+By the Rusza Triangle Inequality, we have $d(A,C) \le d(A,B) + d(B,C) $.
+But it violates positive definitiness (take $A,C $ part of the same subgroup).
+
+From this we have that $d(A,-A) = \ln \delta[A] $ and that $d(A,A) = \ln \sigma [A] $.
+Hence $\ln \sigma = d(A,A) \le d(A,-A) + d(A,-A) = 2\ln \delta [A] $
+
+Now we return to the Pl\"unecke-Rusza Inequalities \ref{thm:plunecke-rusza}.
+
+\begin{thm}
+	With $K = \frac{|A+B|}{|A|}, |\pm B \pm B \pm \cdots \pm B| \le K^{h}|A|  $.
+\end{thm}
+
+Big Names: Petridis, Julia Walls, Jim Gowers
+
+It began as a very complicated proof in 2016, but it was seriously streamlined.
+
+\begin{proof}
+	(Petridis')
+
+	Consider a simple case:
+	We prove that if $|A+B| \le K|A| $, then $|hB| \le K^h |A|$.
+
+	If we decrease the RHS, then this inequality becomes stricter.
+	So we can let $A $ be the smallest such set.
+	Note that we have $B $ fixed the entire time.
+
+	WLOG, $\forall A' \subset A, |A'+B| \ge K|A'| $.
+	\begin{lem}
+		Under all these assumptions, $|A+B+C| \le K|A+C| $ for an arbitrary $C $.
+	\end{lem}
+
+	This implies this case because $|hB| \le |A+hB| \le K|A+(h-1)B| \le K^2|A+(h-2)B| \le \cdots$ (let $C = (h-1)B $ in the lemma).
+	This leads to $|hB| \le K^{h-1}|A+B| \le K^{h}|A|   $ (definition of $K $).
+
+	\begin{proof}
+		(Lemma)
+
+		We do induction on $C $.
+		Suppose it is true up to $|C| $ and we have $C' = C \cup \{x\}   $.
+		Then $|A+B+C| \le K|A+C| $.
+		We want $|A+B+C'| \le K|A+C'| $.
+
+		We have $A+B+C' \subseteq (A+B+C)\cup (A+B+\{x\}), A+C' \subseteq (A+C) \cup (A+x)$ by definition.
+		Suppose for a second that this (RHS) was a disjoint unions.
+		Then because $|A+B+C| \le K|A+C|, |A+B+x| \le |A+x| $, completing the proof.
+
+		By PIE (principle of inclusion exclusion), we have a $W $ s.t.
+		\[
+			W+x = (A+C)\cap (A+x)
+		.\]
+		This is a proper subset, because otherwise we are done (nothing else is added on both sides, i.e. $A+C' = (A+C)\cup(A+x) \subseteq (A+C)\cap (A+x) $).
+		So $W = (A+C-x) \cap A $.
+
+		Next $(A+B+C)\cap(A+B+x) \supseteq W + x+B $ (we are supposing the LHS is small).
+		By more PIE, we have that all we need to prove is that $|W+x+B| \ge K|W+x| $ and that $|W+B| \ge K|W|, W \subsetneq A $.
+
+		Then double induction on $A $ and then top down.
+	\end{proof}
+\end{proof}
+
+We are still focused on \Cref{lem:bogolubov-rusza}, i.e. that $\exists P\subseteq 2A-2A $ s.t. $|P| \ge |A| \exp(-K^{O(1)})  $.
+
+The reason this is better than what we have before is that we can prove this for
+
+\begin{enumerate}
+	\item $A' \subseteq A, \frac{|A|}{|A'| \le \exp(K^{O(1)} }) ,$ \Cref{lem:bogolubov-rusza} for $A' \implies $ BR lemma for $A $
+	\item BR Lemma is invariant under Freiman isomorphisms of order 8
+\end{enumerate}
+
+\begin{definition}
+	Let $G,H $ be abelian groups, $A\subseteq G, B\subseteq H $.
+	A \textbf{Freiman Homomorphism} of order $k $ is defined by
+	\[
+		(G,A) \overrightarrow[\phi] (H,B)
+	\]
+	s.t. $\phi:A\to B $ is a bijection between $A,B $ s.t.
+	\[
+		a_{1}+\ldots a_k = a_{1}'+\ldots a_k' \implies \phi(a_{1})+\ldots +\phi (a_k) = \phi (a_{1}') + \ldots +\phi (a_k').
+	\]
+\end{definition}
+
+An example is an injective homomorphism that maps $a_{i} \mapsto a'_i $.
+They are almost as good as homomorphisms, and they are indistinguishable up to $k $-tuples.
+
+\begin{definition}
+	A \textbf{Freiman isomorphism} is a Freiman homorphism whose inverse is a Freiman homomorphism.
+\end{definition}
+
+\begin{prop}
+	If we have a Freiman isomorphism of order 8: $(G,A) \to (H,B) $, then BR lemma for $A $ is equivalent to BR lemma for $B $.
+\end{prop}
+\begin{proof}
+	Clearly we have a Freiman homomorphism $(G,2A-2A) \to (H,2B-2B) $ of order 2.
+	We have injectivity is because $\phi $ is bijective and well-defined.
+	Now suppose we have a proper gap $P\subseteq 2A-2A $.
+	Then $\phi(P) $ is a proper gap or subgroup of $H $.
+
+	For $d=2 $, the gap is just a grid, and this grid is then translated into a wiggly grid.
+	But we want it to be a full grid, and we have this by generating the right grid by the images of the terms on the LHS.
+
+	We have the relation that $a_{1}+a_{4}=a_{2}+a_{3} \rightarrow b_{1}+b_{4}=b_{2}+b_{3}	$.
+	As another example, $a_{1}+a_{5}=2a_{2} \rightarrow b_{1}+b_{5}=2b_{2} $.
+	Simply repeat this.
+	\begin{figure}[ht]
+		\centering
+		\includegraphics[width=.25\textwidth]{grid}
+		\caption{Grid with $d=2 $ \label{fig:grid}}
+	\end{figure}
+
+	We will complete this proof on Tuesday.
+\end{proof}
+
+Next we will use basic Fourier analysis to reduce BR Lemma in $\Z $ to BR Lemma in $\Z_N $ where $N > 16|8A-8A| $.
+By Chebyshev's theorem (?), we have $p\le K^{O(1)}  $ (also use Rusza Triangle inequality \ref{thm:plunecke-rusza}).
+
+\begin{proof}
+	We have $k=8 $ and $(\Z,A) \xrightarrow{k} (\Z_N,B) $.
+	\begin{lem}
+		$\exists A' \subseteq A $ with $|A'| \ge \frac{|A|}{k} $ and Freiman isomorphism between $(\Z,A')\xrightarrow{\phi}(\Z_N,B) $ where $N $ has the same restriction.
+	\end{lem}
+	\begin{proof}
+		Outline of proof:
+		The isomorphism is constructed with a huge $p $.
+		We will find one
+		\[
+			(\Z,A') \xrightarrow{\phi} (\Z_p,L)\xrightarrow{\psi} (\Z_N,B)
+		.\]
+		THen $\phi $ is the quotient map, and $\psi $ is the remainder function.
+		It takes $a\in \Z_p^{\times}  $, think about it as an integer, and $\psi(a) = a\pmod{N} $.
+	\end{proof}
+\end{proof}
+
 \end{document}
