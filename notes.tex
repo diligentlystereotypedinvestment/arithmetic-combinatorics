@@ -3,6 +3,9 @@
 \input{~/templates/math.tex}
 \newtheorem{question}{Question}
 \usepackage{fullpage}
+\usepackage{exercise}
+\newtheorem{exercise}{Exercise}[section]
+% \usepackage{yhmath}
 \DeclareMathOperator{\Sym}{Sym_1}
 
 \title{Arithmetic Combinatorics}
@@ -103,7 +106,7 @@ Inverse: For which $A $ is $|A+A| $ small?
 \begin{figure}[ht]
 	\centering
 	\includegraphics[width = .5\textwidth]{wall}
-	\caption{The e-transform}
+	\caption{The e-transform \label{fig:e-transform}}
 \end{figure}
 
 \begin{lem}
@@ -493,7 +496,7 @@ Inuitively, $\rank(P) \le K^{O(1)}$, roughly $K $.
 
 \subsection{Pl\"unecke-Rusza Inequalities}
 
-\begin{thm}\label{thm:plunecke-rusza}
+\begin{thm}\label{thm:plunecke}
 	$A,B \subseteq G $ s.t. $|A+B| = K |A| $.
 	Then $|\pm B \pm B \pm B \pm \ldots \pm B |$ ($h $ times) $\le K^{h}|A|  $.
 \end{thm}
@@ -559,7 +562,7 @@ But it violates positive definitiness (take $A,C $ part of the same subgroup).
 From this we have that $d(A,-A) = \ln \delta[A] $ and that $d(A,A) = \ln \sigma [A] $.
 Hence $\ln \sigma = d(A,A) \le d(A,-A) + d(A,-A) = 2\ln \delta [A] $
 
-Now we return to the Pl\"unecke-Rusza Inequalities \ref{thm:plunecke-rusza}.
+Now we return to the Pl\"unecke-Rusza Inequalities \ref{thm:plunecke}.
 
 \begin{thm}
 	With $K = \frac{|A+B|}{|A|}, |\pm B \pm B \pm \cdots \pm B| \le K^{h}|A|  $.
@@ -626,7 +629,7 @@ The reason this is better than what we have before is that we can prove this for
 	Let $G,H $ be abelian groups, $A\subseteq G, B\subseteq H $.
 	A \textbf{Freiman Homomorphism} of order $k $ is defined by
 	\[
-		(G,A) \overrightarrow[\phi] (H,B)
+		(G,A) \xrightarrow{\phi} (H,B)
 	\]
 	s.t. $\phi:A\to B $ is a bijection between $A,B $ s.t.
 	\[
@@ -685,4 +688,248 @@ By Chebyshev's theorem (?), we have $p\le K^{O(1)}  $ (also use Rusza Triangle i
 	\end{proof}
 \end{proof}
 
+\section{4/2/24}
+
+The Freiman isomorphism definition is equivalent to
+\begin{definition}
+	A \textbf{Freiman isomorphism} of order $k $ is a map $\phi $ from $A\subseteq G $ to $B \subseteq H $ s.t.
+	\[
+		\phi(a_{1}) + \phi(a_{2}) + \cdots + \phi(a_k) = \phi(a_{1}') + \phi(a_{2}') + \cdots + \phi(a_k') \iff a_{1}+a_{2}+\cdots+a_k = a_{1}'+a_{2}'+\cdots+a_k'
+	\]
+	and $|A| = |B| $.
+\end{definition}
+
+We flesh out the proof of the lemma from before:
+\begin{lem}
+	$\forall A\subseteq \Z $ and $N \ge 2k|kA-kA|, \exists A'\subseteq A $ s.t. $|A'| \ge |A|/k $ and Freiman isomorphism $(\Z,A')\to (\Z,B) $ of order $k $ ($B \subseteq \Z_N $).
+\end{lem}
+\begin{proof}
+	We construct the maps
+	\[
+		(\Z,A) \xrightarrow{\phi} (\Z_p,L) \to (\Z_n,B)
+	\]
+	with $p $ a sufficiently large prime.
+	We find another $\phi_\lambda  $ s.t. it is also a Freiman isomorphism.
+	Pick $\lambda \in \Z_p^{\times } $ (it remains flexible; random in a sense).
+	Then we can let $\phi_\lambda \coloneqq  \lambda \circ \phi $ with $\phi $ being the quotient map $\Z\to \Z_p $.
+
+	Split up $\Z_p $ into $k $ roughly equal intervals, where $\Z_p $ is represented by $\{0,1,\ldots ,p-1\}   $.
+	Pick the interval containing the most points in $\lambda A $, call it $\lambda A' $.
+	Then
+	\[
+		b_{1}+\cdots+b_k = b_{1}'+\cdots+b_k' \in \Z,\ b_i,b_i'\in \lambda A'
+	\]
+	iff
+	\[
+		b_{1}+\cdots+b_k \equiv b_{1}'+\cdots+b_k' \pmod{p}
+	.\]
+	Then we can translate this by intervals to extend $\lambda A' $ to a set of size $p $ with this property.
+
+	Next let $\iota: \Z / N\Z \to \Z / p\Z $ (exists because $p $ is obscenely large).
+	We WTS that
+	\[
+		\iota (b_{1})+\cdots+\iota (b_k) = \iota (b_{1}')+\iota (b_k') \pmod{N} \iff b_{1}+\cdots +b_k \equiv b_{1}'+\cdots +b_k' \pmod{N}
+	.\]
+	The only potential issue is if the LHS doesn't imply the RHS.
+	Now consider the expression
+	\[
+		b_{1}+\cdots+b_k-b_{1}'-b_{2}'-\cdots-b_k' \pmod{N}
+	.\]
+	This is in $[-kp,kp] $ because $b_i,b_i' \in L $.
+	Notice that there are $2kp / N $ ``bad'' intervals that are 0 mod $N $ and satisfy the iff in $\Z_p $.
+
+	Finally, define
+	\[
+		\Delta \coloneqq  \{a_{1}+\cdots+a_k - a_{1}' - \cdots a_k' \ne 0 | a_i,a_i' \in A\}
+	.\]
+	Clearly $\Delta\subseteq \Z_p $ and $|\Delta| = |kA-kA| $.
+	Consider $\lambda\Delta $.
+	The $\lambda  $ we picked from before was flexible, so we can use a probabilitic argument to pick a lambda retroactively that avoids all the bad points.
+	The probability that $\Delta $ has a bad point is $|\Delta|/p \cdot 2kp / N = |\Delta|\cdots 2k /N $, which is less than 1 by hypothesis.
+\end{proof}
+
+\subsection{Good Model (Dense)}
+
+Let $k=8 $.
+A good model gives us BR-Lemma in specific cases:
+
+Our goal is to prove it true for $A\subseteq \Z_N $ ($\Z_2^N $) \footnote{I don't know what this means, but it was in my notes}.
+It's dense because
+\[
+	|kA-kA| < K^{k}|A|, \mu = \frac{|A'|}{|G|}
+.\]
+
+Now we go on a tangent about the discrete Fourier transform.
+
+\subsection{Discrete Fourier Analysis (on Abelian Groups)}
+
+\subsubsection{Pontryagin Duality}
+
+Fix a locally compact abelian group (topological group whose closure of neighborhoods are compact), e.g. $\Z $ is a discrete one.
+
+\begin{definition}
+\[
+	\bm{T} = \R / \Z = \text{ the circle}
+.\]
+\end{definition}
+
+\begin{definition}
+	For a group $G $,
+	\[
+		\bm{\hat{G}} = \Hom(G,T) \text{ (continuous)}
+	.\]
+\end{definition}
+
+\begin{thm}[Pontryagin Duality]
+	\[
+		\hat{\hat{G} } = G_i
+	\]
+	where $G_i$ is a separated component of $G $.
+\end{thm}
+
+\begin{example}
+	$\hat{\Z} = T  $.
+\end{example}
+
+\begin{example}
+	$\hat{T} = \Z  $ because $\exp(i\theta) \to \exp(i\alpha \theta ) $ are the morphisms, but not all $\alpha $ since $\exp $ has the periodic property.
+	So we only want $\alpha = n \in \Z$.
+\end{example}
+
+\begin{definition}
+ 	Let $G $ be an abelian finite group.
+	The \textbf{characters} of $G $ are elements of $\hat{G}  $, which are all group homomorphisms because we are using the discrete topology.
+\end{definition}
+
+For finite $G $, $\hat{G} = G  $, but this isn't canonical (depends on basis).
+As such it isn't very useful.
+
+To find $\hat{\Z_N}  $, we send $1\mapsto \xi_N $, and call this map $\chi(\xi) $.
+In the particular case of $\Z_{2}^{N}  $, (fix standard basis of $e_{i} $), each $\chi_i: e_i \mapsto 1 $ or $-1 $.
+So here, $S = \{i| \chi(e_i) = -1\}   $ implies that
+\[
+	\chi(S)(x_{1},\ldots,x_n) = (-1)^{\sum_{i\in S}x_i} = (-1)^{\left< x,S \right>}
+.\]
+
+To focus on discrete fourier transform, take an arbitrary $f: G\to \C $.
+
+\begin{definition}
+	\[
+		\bm{\left< f,g \right>} = \mathbb{E}_{x\in_R G}[f(x)\overline{g}(x)]
+	.\]
+	with $\mathbb{E} $ the expectation.\footnote{I don't know what the subscript in expectation means}
+\end{definition}
+
+The conjugation is needed for it to be a Hermitian inner product.
+
+\begin{definition}
+	The discrete Fourier transform is
+	\[
+		\hat{f}:\hat{G} \to \C
+	\]
+	s.t. $\hat{f}(\chi) = \left< f,\chi  \right>  $.
+\end{definition}
+
+\begin{property}
+	\begin{enumerate}
+		\item $\left< \chi ,\chi  \right> =1$
+		\item Orthogenality property: for $\chi_{1}(x_{0})\ne \chi_{2}(x_{0} $ for some $x_{0} $,
+			\[
+				\left< \chi_{1},\chi_{2} \right> = 0
+			.\]
+	\end{enumerate}
+\end{property}
+\begin{proof}
+	1) Obvious
+
+	2) Note that conjugation of characters is inversion.
+	\[
+		\mathbb{E}_x[\chi_{1}(x)\chi_{2}^{-1}(x)] = \mathbb{E}_x[\chi_{1}(x+x_{0})\chi_{2}^{-1}(x+x_{0})] = \chi_{1}(x_{0})\chi_{2}(x_{0})^{-1}\mathbb{E}[\chi_{1}(x)\chi_{2}^{-1}(x)]
+	.\]
+	Hence $\chi_{1}(x_{0}) \chi_{2}(x_{0})^{-1} \ne 1 \implies \left< \chi_{1},\chi_{2} \right> = 0$.
+\end{proof}
+
+Look at a $G\times \hat{G}  $ matrix.
+It is unitary because of the above properties.
+\[
+	\begin{pmatrix} \chi_{1} & \chi_{2} & \cdots \end{pmatrix}  \implies |\hat{G}| = |G|
+.\]
+The Hadamard matrix is another name for matrix.
+
+Then
+\[
+	f(x) = \sum_{\chi \in \hat{G} } \hat{f}(\chi)\chi(x)
+.\]
+
+\begin{exercise}
+	We might want conjugation.
+\end{exercise}
+
+When you translate back and forth, you lose a factor of $\frac{1}{N^{\frac{1}{2}} } $, but not here because we don't care and it's built into expectation.
+
+\begin{thm}[Parseval's Identity]
+	\[
+		|f|^2 = \mathbb{E}_x[|f(x)|^2] = \sum_{\chi} |\hat{f}(\chi )|^2
+	.\]
+\end{thm}
+
+\subsubsection{Convolution}
+
+\begin{definition}
+	\[
+		\bm{(f\ast g)(x)} \coloneqq \mathbb{E}_y[f(x-y)g(y)] = \mathbb{E}_{y_{1},y_{2}}[f(y_{1})g(y_{2})|y_{1}+y_{2}=x]
+	.\]
+\end{definition}
+
+$f,g $ give probability distributions over $G $, and the convolution is basically interpolating them and making it nicer.
+
+\begin{prop}
+	\[
+		\hat{f\ast g} = \hat{f}\cdot \hat{g}
+	.\]
+\end{prop}
+\begin{proof}
+	We WTS that $\widehat{f\ast g} = \hat{f}\hat{g}    $.
+	We only need to show that $\forall x\in \hat{G}  $ we have $\left< f\ast g,x \right> = \left< f,x \right>\left< g,x \right> $.
+
+	We have that
+	\[
+		\left< f\ast g,x \right> = \mathbb{E}_{x,y}[f(x-y)g(y)\chi ^{-1}(x)]
+	.\]
+	Then letting $z = x-y $ gives
+	\[
+		\mathbb{E}_{y,z}[f(z)g(y)\chi ^{-1}(y+z)] = \mathbb{E}_{y,z}[f(z)g(y)\chi ^{-1}(y)\chi (z)]
+	.\]
+	This then equals
+	\[
+		\left< f,x \right>\left< g,x \right>
+	.\]
+\end{proof}
+
+We mostly care about \footnote{the below may be wrong}
+\begin{definition}
+\[
+	\bm{\mathbb{L}_A} =
+	\begin{cases}
+		1 & x\in A\\
+		0 & \text{ else}
+	\end{cases}
+.\]
+\footnote{I can't tell what the symbol here is, I assume it's a bold font L}
+\end{definition}
+
+\begin{thm}
+	\[
+		|\mathbb{L}_A|^2 = \mu = \sum_{\chi} |\chi(\mathbb{L})|^2
+	.\]
+\end{thm}
+
+\begin{lem}
+	\[
+		|\chi(\mathbb{L}_A)|^4 \ge \mu^4
+	.\]
+\end{lem}
+\begin{proof}
+	Consider $\widehat{\mathbb{L}_A\ast \mathbb{L}_{A}\ast \mathbb{L}_{-A}\ast\mathbb{L}_{-A}} = \hat{\mathbb{L}_A}\ast \hat{\mathbb{L}_A}\ast \hat{\mathbb{L}_{-A}}\ast \hat{\mathbb{L}_{-A}} = |\mathbb{L}_A|^{4} $.
+\end{proof}
 \end{document}
